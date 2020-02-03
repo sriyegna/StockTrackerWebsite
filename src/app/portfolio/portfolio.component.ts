@@ -30,7 +30,15 @@ export class PortfolioComponent implements OnInit {
     this.service.getLatestStocksFromDbFn().subscribe(
       data => console.log(data),
       error => console.log(error),
-      () => console.log("Completed")
+      () => {
+        this.service.getPreviousDayStockFromDbFn().subscribe(
+          data => console.log(data),
+          error => console.log(error),
+          () => {
+            console.log("Got previous stocks")
+          }
+        );
+      }
     );
   }
 

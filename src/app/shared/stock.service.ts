@@ -25,8 +25,6 @@ export class StockService {
             stockData.forEach(element => {
               this.stocks.push(element);
             });
-            
-            this.getPreviousDayStockFromDbFn();
           },
           err => {
             console.log(err);
@@ -34,7 +32,7 @@ export class StockService {
         )
       );
 
-      setTimeout(() => observer.complete, 2000);
+      setTimeout(() => observer.complete(), 2000);
     })
 
     return observable;
@@ -43,20 +41,28 @@ export class StockService {
 
   getPreviousDayStockFromDbFn() {
     this.previousDayStocks = [];
-    this.getPreviousDayStockFromDb().subscribe(
-      res => {
-        console.log(res);
-        let stockResultData: any = res;
-        let stockData = stockResultData.PreviousStocks
 
-        stockData.forEach(element => {
-          this.previousDayStocks.push(element);
-        });
-      },
-      err => {
-        console.log(err);
-      }
-    )
+    let observable = Observable.create((observer) => {
+      observer.next(
+        this.getPreviousDayStockFromDb().subscribe(
+          res => {
+            console.log(res);
+            let stockResultData: any = res;
+            let stockData = stockResultData.PreviousStocks
+
+            stockData.forEach(element => {
+              this.previousDayStocks.push(element);
+            });
+          },
+          err => {
+            console.log(err);
+          }
+        )
+      );
+      setTimeout(() => observer.complete(), 2000);
+    })
+
+    return observable;
   }
 
   getHistoricalData(ticker) {
