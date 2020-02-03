@@ -1,0 +1,5 @@
+<div>
+    <div style="display: block">
+        <canvas *ngIf="lineChartDataPopulated()" baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+    </div>
+</div>
