@@ -25,14 +25,16 @@ export class StockService {
             stockData.forEach(element => {
               this.stocks.push(element);
             });
+            observer.complete();
           },
           err => {
             console.log(err);
+            observer.complete();
           }
         )
       );
 
-      setTimeout(() => observer.complete(), 2000);
+      //setTimeout(() => observer.complete(), 1000);
     })
 
     return observable;
@@ -53,13 +55,15 @@ export class StockService {
             stockData.forEach(element => {
               this.previousDayStocks.push(element);
             });
+            observer.complete();
           },
           err => {
             console.log(err);
+            observer.complete();
           }
         )
       );
-      setTimeout(() => observer.complete(), 2000);
+      //setTimeout(() => observer.complete(), 1000);
     })
 
     return observable;
@@ -70,11 +74,11 @@ export class StockService {
   }
 
   getLatestStocksFromDb() {
-    return this.http.get("http://127.0.0.1:5000/GetLatestStocksFromDb/")
+    return this.http.get("http://127.0.0.1:5000/GetLatestStocksFromDb/");
   }
 
   getPreviousDayStockFromDb() {
-    return this.http.get("http://127.0.0.1:5000/GetPreviousDayStockFromDb/")
+    return this.http.get("http://127.0.0.1:5000/GetPreviousDayStockFromDb/");
   }
 
   UpdateDailyStockDbByTicker(stkticker) {
@@ -82,8 +86,16 @@ export class StockService {
     reqObj = {
       ticker: stkticker
     }
-    return this.http.post("http://127.0.0.1:5000/UpdateDailyStockDb/", reqObj)
+    return this.http.post("http://127.0.0.1:5000/UpdateDailyStockDb/", reqObj);
   }
+
+getMovingDayAverageFromDb(ticker, days) {
+  return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days);
+}
+
+getSAndP500() {
+  return this.http.get("http://127.0.0.1:5000/GetSAndP500/");
+}
 
   
 

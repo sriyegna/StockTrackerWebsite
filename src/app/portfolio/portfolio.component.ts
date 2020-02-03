@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StockService } from '../shared/stock.service';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-portfolio',
@@ -10,19 +12,35 @@ export class PortfolioComponent implements OnInit {
 
   public lineChartOptions = {
     scaleShowVerticalLines: true,
-    responsive: true
+    responsive: true,
+    plugins: {
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: 'x'
+        },
+        zoom: {
+          enabled: true,
+          mode: 'x'
+        }
+      }
+    }
   };
-
-  //public lineChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012']
-  public lineChartLabels = []
   public lineChartType = "line";
-  public lineChartLegend = true;
+  public lineChartLegend = false;
+  public lineChart1Labels = []
+  public lineChart1Data = [];
+  selected1Stock = "";
+  selected1Days = 5;
 
-  public lineChartData = [
-    //{data: [10, 20, 30, 40, 50, 60, 70], label: 'Series A'},
-    //{data: [0, 20, 40, 60, 80, 100, 120], label: 'Series B'}
-  ];
+  
+  public lineChart2Labels = []
+  public lineChart2Data = [];
+  selected2Stock = "";
+  selected2Days = 5;
 
+  sAndPValue = 0;
+  portfolioValue = "0";
 
   constructor(private service:StockService) { }
 
@@ -31,11 +49,37 @@ export class PortfolioComponent implements OnInit {
       data => console.log(data),
       error => console.log(error),
       () => {
+        if (this.service.stocks.length > 1) {
+          this.selected1Stock = this.service.stocks[0][1];
+          this.selected2Stock = this.service.stocks[1][1];
+        }
+        else if (this.service.stocks.length == 1) {
+          this.selected1Stock = this.service.stocks[0][1];
+          this.selected2Stock = this.service.stocks[0][1];
+        }
+        else {
+          this.selected1Stock = "No Stocks";
+          this.selected2Stock = "No Stocks";
+        }
+        
         this.service.getPreviousDayStockFromDbFn().subscribe(
           data => console.log(data),
           error => console.log(error),
           () => {
-            console.log("Got previous stocks")
+            this.determinePortfolioValue();
+            this.changeGraph1Days(this.selected1Days).subscribe(
+             data => console.log(data),
+             error => console.log(error),
+             () => {
+              this.changeGraph2Days(this.selected2Days).subscribe(
+                data => console.log(data),
+                error => console.log(error),
+                () => {
+                  this.getSAndP500();
+                }
+              );
+             } 
+            );
           }
         );
       }
@@ -56,44 +100,172 @@ export class PortfolioComponent implements OnInit {
     return false;
   }
 
-  lineChartDataPopulated() {
-    if (this.lineChartData.length > 0) {
-      return true;
+  lineChartDataPopulated(chartNum) {
+    if (chartNum == 0) {
+      if (this.lineChart1Data.length > 0) {
+        return true;
+      }
+      return false;
     }
-    return false;
+    else {
+      if (this.lineChart2Data.length > 0) {
+        return true;
+      }
+      return false;
+    }
   }
 
-  getHistoricalData() {
-    this.service.getHistoricalData("MSFT").subscribe(
+
+  changeGraph1Ticker(stk) {
+    this.selected1Stock = stk[1]
+    this.changeGraph1Days(this.selected1Days).subscribe(
       res => {
-        let historicalResultData: any = res;
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 
-        let historicalDataArray = historicalResultData.HistoricalData
-        console.log(historicalDataArray)
+  htmlChangeGraph1Days(days) {
+    this.selected1Days = days;
+    this.changeGraph1Days(this.selected1Days).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
 
-        let newData = {
-          data: [],
-          label: "MSFT"
-        }
+  changeGraph1Days(days) {
+    let ticker = this.selected1Stock;
+    let observable = Observable.create((observer) => {
+      observer.next(
+        this.service.getMovingDayAverageFromDb(ticker, days).subscribe(
+          res => {
+            let historicalResultData: any = res;
 
-        // historicalDataArray.forEach(element => {
-        //   console.log(element);
-        //   this.lineChartLabels.push(element[0])
-        //   newData.data.push(element[1])
-        // });
+            let historicalDataArray = historicalResultData.MovingDayAverage
 
-        for (let i = 0; i < historicalDataArray.length; i = i + 10) {
-          this.lineChartLabels.push(historicalDataArray[i][0]);
-          newData.data.push(historicalDataArray[i][1])
-        }
+            let newData = {
+              data: [],
+              label: ticker
+            }
 
-        this.lineChartData.push(newData);
+            this.lineChart1Labels = [];
+            for (let i = 0; i < historicalDataArray.length; i = i + 1) {
+              this.lineChart1Labels.push(historicalDataArray[i][2]);
+              newData.data.push(historicalDataArray[i][0])
+            }
 
+            this.lineChart1Data = [];
+            this.lineChart1Data.push(newData);
+            observer.complete()
+
+          },
+          err => {
+            console.log(err);
+            observer.complete()
+          }
+        )
+      )
+    })
+    return observable;
+  }
+
+  changeGraph2Ticker(stk) {
+    this.selected2Stock = stk[1]
+    this.changeGraph2Days(this.selected2Days).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  htmlChangeGraph2Days(days) {
+    this.selected2Days = days;
+    this.changeGraph2Days(this.selected2Days).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  changeGraph2Days(days) {
+    let ticker = this.selected2Stock;
+    let observable = Observable.create((observer) => {
+      observer.next(
+        this.service.getMovingDayAverageFromDb(ticker, days).subscribe(
+          res => {
+            let historicalResultData: any = res;
+
+            let historicalDataArray = historicalResultData.MovingDayAverage
+
+            let newData = {
+              data: [],
+              label: ticker
+            }
+
+            this.lineChart2Labels = [];
+            for (let i = 0; i < historicalDataArray.length; i = i + 1) {
+              this.lineChart2Labels.push(historicalDataArray[i][2]);
+              newData.data.push(historicalDataArray[i][0])
+            }
+
+            this.lineChart2Data = [];
+            this.lineChart2Data.push(newData);
+
+            observer.complete();
+          },
+          err => {
+            console.log(err);
+          }
+        )
+      )
+    });
+    return observable;
+  }
+
+  determineGainLoss(pp, cp) {
+    return (((cp/pp) * 100) - 100).toFixed(2);
+  }
+
+  getSAndP500() {
+    this.service.getSAndP500().subscribe(
+      res => {
+        let resultData: any = res;
+
+        let sAndPValue = resultData.SAndP500
+        this.sAndPValue = sAndPValue;
       },
       err => {
         console.log(err);
       }
     )
+  }
+
+  determinePortfolioValue() {
+    let portfolioSum = 0;
+    for (let i = 0; i < this.service.stocks.length; i++) {
+      portfolioSum = portfolioSum + (this.service.stocks[i][6] - this.service.previousDayStocks[i][6])
+    }
+    this.portfolioValue = portfolioSum.toFixed(2)
+  }
+
+  stockArraysPopulated() {
+    if (this.service.stocks.length > 0 && this.service.previousDayStocks.length > 0) {
+      return true;
+    }
+    return false;
   }
 
 }

@@ -4,14 +4,26 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="card col-2 mx-auto mt-3 pt-3 pb-3">
+        S&P 500: ${{sAndPValue}}
+    </div>
+    <div class="card col-4 mx-auto mt-3 pt-3 pb-3">
+        My Portfolio: ${{portfolioValue}}
+    </div>
+    <div class="card col-4 mx-auto mt-3 pt-3 pb-3">
+        Blank
+    </div>
+</div>
+
 
 <div class="row">
-    <div class="card col-3 mx-auto">
+    <div class="card col-2 mx-auto mt-3 pt-3">
         <h4>My Portfolio</h4>
         <table class="table">
             <tbody>
                 <div *ngFor="let stk of service.stocks; let i = index" [attr.data-index]="i" class="divTableRow">
-                    <tr>
+                    <tr *ngIf="i<5">
                         <td>
                             {{stk[1]}}
                         </td>
@@ -22,12 +34,12 @@
                             <button type="button" class="btn btn-primary" (click)="UpdateStock(stk)">Sell</button>
                         </td>
                     </tr>
-                    <tr class="tableSecondTr">
+                    <tr class="tableSecondTr" *ngIf="i<5">
                         <td *ngIf="previousStockAvailable()">
-                            PP: {{service.previousDayStocks[i][6]}}
+                            PP: ${{service.previousDayStocks[i][6]}}
                         </td>
                         <td>
-                            CP: {{stk[6]}}
+                            CP: ${{stk[6]}}
                         </td>
                         <td>
                             IV
@@ -38,45 +50,110 @@
         </table>
     </div>
 
-    <div class="card col-3 mx-auto">
-        <div class="row">
-            <div class="col-3">
+    <div class="card col-4 mx-auto mt-3 pt-3">
+        <div class="row ml-2">
+            <div>
                 <!-- Stocks Button -->
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="stockddButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Stocks
+                        {{selected1Stock}}
                     </button>
                     <div id="stock-dd" class="dropdown-menu" aria-labelledby="stockddButton">
-                        <div class="dropdown-item" *ngFor="let stk of service.stocks">{{stk[1]}}</div>
+                        <div class="dropdown-item" *ngFor="let stk of service.stocks" (click)="changeGraph1Ticker(stk)">{{stk[1]}}</div>
                     </div>
                 </div>
             </div>
-            <div class="col-3 offset-5">
+            <div class="ml-auto mr-2">
                 <!-- Graph Button -->
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="graphddButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Graph
+                        {{selected1Days}}
                     </button>
                     <div id="graph-dd" class="dropdown-menu" aria-labelledby="graphddButton">
-                        <div class="dropdown-item">5 Days</div>
-                        <div class="dropdown-item">10 Days</div>
-                        <div class="dropdown-item">20 Days</div>
-                        <div class="dropdown-item">50 Days</div>
-                        <div class="dropdown-item">100 Days</div>
-                        <div class="dropdown-item">200 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph1Days(5)">5 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph1Days(10)">10 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph1Days(20)">20 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph1Days(50)">50 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph1Days(100)">100 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph1Days(200)">200 Days</div>
                     </div>
                 </div>
             </div>
-
-            <!-- Graph -->
-            <canvas *ngIf="lineChartDataPopulated()" baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
         </div>
-        
-        
-        Test one card
+        <!-- Graph -->
+        <canvas class="pt-3" *ngIf="lineChartDataPopulated(0)" baseChart [datasets]="lineChart1Data" [labels]="lineChart1Labels" [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
     </div>
 
-    <div class="card col-3 mx-auto">
-        Test one card
+    <div class="card col-4 mx-auto mt-3 pt-3">
+        <div class="row ml-2">
+            <div>
+                <!-- Stocks Button -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="stockddButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{selected2Stock}}
+                    </button>
+                    <div id="stock-dd" class="dropdown-menu" aria-labelledby="stockddButton">
+                        <div class="dropdown-item" *ngFor="let stk of service.stocks" (click)="changeGraph2Ticker(stk)">{{stk[1]}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ml-auto mr-2">
+                <!-- Graph Button -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="graphddButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{selected2Days}}
+                    </button>
+                    <div id="graph-dd" class="dropdown-menu" aria-labelledby="graphddButton">
+                        <div class="dropdown-item" (click)="htmlChangeGraph2Days(5)">5 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph2Days(10)">10 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph2Days(20)">20 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph2Days(50)">50 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph2Days(100)">100 Days</div>
+                        <div class="dropdown-item" (click)="htmlChangeGraph2Days(200)">200 Days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Graph -->
+        <canvas class="pt-3" *ngIf="lineChartDataPopulated(1)" baseChart [datasets]="lineChart2Data" [labels]="lineChart2Labels" [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
     </div>
 </div>
+
+<hr>
+
+
+<!-- Stock Table -->
+<table class="table table-striped" *ngIf="stockArraysPopulated()">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ticker</th>
+            <th scope="col">Purchase Price</th>
+            <th scope="col">Current Price</th>
+            <th scope="col">Implied Volatility</th>
+            <th scope="col">% Gain/Loss</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let stk of service.stocks; let i = index" [attr.data-index]="i">
+            <th scope="row">
+                {{i}}
+            </th>
+            <td>
+                {{stk[1]}}
+            </td>
+            <td>
+                ${{service.previousDayStocks[i][6]}}
+            </td>
+            <td>
+                ${{stk[6]}}
+            </td>
+            <td>
+                IP
+            </td>
+            <td>
+                {{determineGainLoss(service.previousDayStocks[i][6], stk[6])}}%
+            </td>
+        </tr>
+    </tbody>
+</table>
