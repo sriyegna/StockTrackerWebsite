@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -12,22 +13,32 @@ export class StockService {
 
   getLatestStocksFromDbFn() {
     this.stocks = [];
-    this.getLatestStocksFromDb().subscribe(
-      res => {
-        console.log(res);
-        let stockResultData: any = res;
-        let stockData = stockResultData.LatestStocks
 
-        stockData.forEach(element => {
-          this.stocks.push(element);
-        });
-        
-        this.getPreviousDayStockFromDbFn();
-      },
-      err => {
-        console.log(err);
-      }
-    )
+    let observable = Observable.create((observer) => {
+      observer.next(
+        this.getLatestStocksFromDb().subscribe(
+          res => {
+            console.log(res);
+            let stockResultData: any = res;
+            let stockData = stockResultData.LatestStocks
+    
+            stockData.forEach(element => {
+              this.stocks.push(element);
+            });
+            
+            this.getPreviousDayStockFromDbFn();
+          },
+          err => {
+            console.log(err);
+          }
+        )
+      );
+
+      setTimeout(() => observer.complete, 2000);
+    })
+
+    return observable;
+    
   }
 
   getPreviousDayStockFromDbFn() {

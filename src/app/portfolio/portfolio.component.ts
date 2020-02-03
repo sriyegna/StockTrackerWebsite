@@ -27,7 +27,11 @@ export class PortfolioComponent implements OnInit {
   constructor(private service:StockService) { }
 
   ngOnInit() {
-    this.service.getLatestStocksFromDbFn();
+    this.service.getLatestStocksFromDbFn().subscribe(
+      data => console.log(data),
+      error => console.log(error),
+      () => console.log("Completed")
+    );
   }
 
   previousStockAvailable() {
