@@ -147,22 +147,40 @@ export class PortfolioComponent implements OnInit {
         this.service.getMovingDayAverageFromDb(ticker, days).subscribe(
           res => {
             let historicalResultData: any = res;
-
             let historicalDataArray = historicalResultData.MovingDayAverage
+            let m = historicalResultData.m
+            let b = historicalResultData.b
+            console.log(m)
+            console.log(b)
 
-            let newData = {
+            let tickerData = {
               data: [],
               label: ticker
+            }
+
+            let linearData = {
+              data: [],
+              label: days + " Linear Data"
             }
 
             this.lineChart1Labels = [];
             for (let i = 0; i < historicalDataArray.length; i = i + 1) {
               this.lineChart1Labels.push(historicalDataArray[i][2]);
-              newData.data.push(historicalDataArray[i][0])
+              tickerData.data.push(historicalDataArray[i][0])
+
+              linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+              if (i >= historicalDataArray.length - days) {
+                //linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+              }
+              else {
+                linearData.data.push(null);
+              }
+              
             }
 
             this.lineChart1Data = [];
-            this.lineChart1Data.push(newData);
+            this.lineChart1Data.push(tickerData);
+            this.lineChart1Data.push(linearData);
             observer.complete()
 
           },
