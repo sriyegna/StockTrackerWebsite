@@ -13,6 +13,23 @@ export class PortfolioComponent implements OnInit {
   public lineChartOptions = {
     scaleShowVerticalLines: true,
     responsive: true,
+    scales: {
+      xAxes: [{
+        ticks: {
+          fontColor: 'white'
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          fontColor: 'white'
+        }
+      }]
+    },
+    legend: {
+      labels: {
+        fontColor: 'white'
+      }
+    },
     plugins: {
       zoom: {
         pan: {
@@ -27,7 +44,7 @@ export class PortfolioComponent implements OnInit {
     }
   };
   public lineChartType = "line";
-  public lineChartLegend = false;
+  public lineChartLegend = true;
   public lineChart1Labels = []
   public lineChart1Data = [];
   selected1Stock = "";
@@ -150,8 +167,6 @@ export class PortfolioComponent implements OnInit {
             let historicalDataArray = historicalResultData.MovingDayAverage
             let m = historicalResultData.m
             let b = historicalResultData.b
-            console.log(m)
-            console.log(b)
 
             let tickerData = {
               data: [],
@@ -169,12 +184,14 @@ export class PortfolioComponent implements OnInit {
               tickerData.data.push(historicalDataArray[i][0])
 
               linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+              /*
               if (i >= historicalDataArray.length - days) {
-                //linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+                linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
               }
               else {
                 linearData.data.push(null);
               }
+              */
               
             }
 
@@ -227,21 +244,30 @@ export class PortfolioComponent implements OnInit {
             let historicalResultData: any = res;
 
             let historicalDataArray = historicalResultData.MovingDayAverage
+            let m = historicalResultData.m
+            let b = historicalResultData.b
 
-            let newData = {
+            let tickerData = {
               data: [],
               label: ticker
+            }
+
+            let linearData = {
+              data: [],
+              label: days + " Linear Data"
             }
 
             this.lineChart2Labels = [];
             for (let i = 0; i < historicalDataArray.length; i = i + 1) {
               this.lineChart2Labels.push(historicalDataArray[i][2]);
-              newData.data.push(historicalDataArray[i][0])
+              tickerData.data.push(historicalDataArray[i][0])
+
+              linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
             }
 
             this.lineChart2Data = [];
-            this.lineChart2Data.push(newData);
-
+            this.lineChart2Data.push(tickerData);
+            this.lineChart2Data.push(linearData);
             observer.complete();
           },
           err => {
