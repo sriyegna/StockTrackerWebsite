@@ -18,22 +18,22 @@
                     {{selectedDays}}
                 </button>
                 <div id="graph-dd" class="dropdown-menu" aria-labelledby="graphddButton">
-                    <div class="dropdown-item" (click)="htmlChangeGraphDays(5)">5 Days</div>
-                    <div class="dropdown-item" (click)="htmlChangeGraphDays(10)">10 Days</div>
-                    <div class="dropdown-item" (click)="htmlChangeGraphDays(20)">20 Days</div>
-                    <div class="dropdown-item" (click)="htmlChangeGraphDays(50)">50 Days</div>
-                    <div class="dropdown-item" (click)="htmlChangeGraphDays(100)">100 Days</div>
-                    <div class="dropdown-item" (click)="htmlChangeGraphDays(200)">200 Days</div>
+                    <div class="dropdown-item" *ngIf="dateRange(5)" (click)="htmlChangeGraphDays(5)">5 Days</div>
+                    <div class="dropdown-item" *ngIf="dateRange(10)" (click)="htmlChangeGraphDays(10)">10 Days</div>
+                    <div class="dropdown-item" *ngIf="dateRange(20)" (click)="htmlChangeGraphDays(20)">20 Days</div>
+                    <div class="dropdown-item" *ngIf="dateRange(50)" (click)="htmlChangeGraphDays(50)">50 Days</div>
+                    <div class="dropdown-item" *ngIf="dateRange(100)" (click)="htmlChangeGraphDays(100)">100 Days</div>
+                    <div class="dropdown-item" *ngIf="dateRange(200)" (click)="htmlChangeGraphDays(200)">200 Days</div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
         <form class="form-inline">
-            <div class="form-group hidden display-none">
+            <div class="form-group hidden">
               <div class="input-group">
                 <input name="datepicker"
-                       class="form-control"
+                       class="form-control d-none"
                        ngbDatepicker
                        #datepicker="ngbDatepicker"
                        [autoClose]="'outside'"
@@ -54,27 +54,27 @@
                 </ng-template>
               </div>
             </div>
-            <div class="form-group">
-              <div class="input-group date-button">
+            <div class="form-group date-button mr-2">
+              <div class="input-group">
                 <input #dpFromDate
                        class="form-control" placeholder="yyyy-mm-dd"
                        name="dpFromDate"
                        [value]="formatter.format(fromDate)"
                        (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
                 <div class="input-group-append">
-                  <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+                  <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
                 </div>
               </div>
             </div>
-            <div class="form-group ml-2">
-              <div class="input-group date-button">
+            <div class="form-group date-button">
+              <div class="input-group">
                 <input #dpToDate
                        class="form-control" placeholder="yyyy-mm-dd"
                        name="dpToDate"
                        [value]="formatter.format(toDate)"
                        (input)="toDate = validateInput(toDate, dpToDate.value)">
                 <div class="input-group-append">
-                  <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+                  <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
                 </div>
               </div>
             </div>

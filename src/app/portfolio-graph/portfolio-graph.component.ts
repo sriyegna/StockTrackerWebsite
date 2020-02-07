@@ -65,7 +65,6 @@ export class PortfolioGraphComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log(this.graphIndex);
     //Problem if there is only one stock in the database. We will get an index of 2.
     this.selectedStock = this.service.stocks[this.graphIndex][1];
     //console.log(this.service.stocks[this.graphIndex][1]);
@@ -176,6 +175,16 @@ export class PortfolioGraphComponent implements OnInit {
       this.toDate = null;
       this.fromDate = date;
     }
+    if ((this.fromDate != null) && (this.toDate != null)) {
+      console.log("Changing graph days");
+      this.changeGraphDays().subscribe(
+        data => this.service.noOperation(),
+        error => console.log(error),
+        () => {
+          console.log("Graph updated by date");
+        }
+      )
+    }
   }
 
   isHovered(date: NgbDate) {
@@ -193,6 +202,13 @@ export class PortfolioGraphComponent implements OnInit {
   validateInput(currentValue: NgbDate, input: string): NgbDate {
     const parsed = this.formatter.parse(input);
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
+  dateRange(days) {
+    if ((days - 1) < (this.lineChartLabels.length - days)) {
+      return true;
+    }
+    return false;
   }
 
 }
