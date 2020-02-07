@@ -64,16 +64,14 @@ export class PortfolioGraphComponent implements OnInit {
   ngOnInit() {
     console.log(this.graphIndex);
     //Problem if there is only one stock in the database. We will get an index of 2.
-    this.selectedStock = this.service.stocks[this.graphIndex - 1][1];
+    this.selectedStock = this.service.stocks[this.graphIndex][1];
     //console.log(this.service.stocks[this.graphIndex][1]);
   
     this.changeGraphDays(this.selectedDays).subscribe(
       data => this.service.noOperation(),
       error => console.log(error),
       () => {
-          if (this.graphIndex == 1) {
-            this.service.firstGraphLoaded = true;
-          }
+          this.service.noOperation();
         }
       );
   }
