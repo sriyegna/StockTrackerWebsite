@@ -14,6 +14,7 @@ export class PortfolioGraphComponent implements OnInit {
   hoveredDate: NgbDate;
   fromDate: NgbDate;
   toDate: NgbDate;
+  maxDate: NgbDate;
 
 
   public lineChartOptions = {
@@ -62,6 +63,7 @@ export class PortfolioGraphComponent implements OnInit {
   constructor(private service:StockService, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) {
     this.fromDate = calendar.getNext(calendar.getToday(), 'm', -6);
     this.toDate = calendar.getToday();
+    this.maxDate = calendar.getToday();
    }
 
   ngOnInit() {
