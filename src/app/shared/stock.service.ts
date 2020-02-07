@@ -109,15 +109,19 @@ export class StockService {
     return this.http.post("http://127.0.0.1:5000/UpdateDailyStockDb/", reqObj);
   }
 
-  getMovingDayAverageFromDb(ticker, days) {
-    return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days);
+  getMovingDayAverageFromDb(ticker, days, fromDate, toDate) {
+    return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days + "&" + this.ngbDateToString(fromDate) + "&" + this.ngbDateToString(toDate));
   }
 
   getSAndP500FromDb() {
     return this.http.get("http://127.0.0.1:5000/GetSAndP500/");
   }
 
-noOperation() {}
+  ngbDateToString(date) {
+    return date.year + "-" + date.month + "-" + date.day;
+  }
+
+  noOperation() {}
   
 
 

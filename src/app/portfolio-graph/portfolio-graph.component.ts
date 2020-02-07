@@ -70,7 +70,7 @@ export class PortfolioGraphComponent implements OnInit {
     this.selectedStock = this.service.stocks[this.graphIndex][1];
     //console.log(this.service.stocks[this.graphIndex][1]);
   
-    this.changeGraphDays(this.selectedDays).subscribe(
+    this.changeGraphDays().subscribe(
       data => this.service.noOperation(),
       error => console.log(error),
       () => {
@@ -90,7 +90,7 @@ export class PortfolioGraphComponent implements OnInit {
 
   changeGraphTicker(stk) {
     this.selectedStock = stk[1]
-    this.changeGraphDays(this.selectedDays).subscribe(
+    this.changeGraphDays().subscribe(
       res => {
         this.service.noOperation();
       },
@@ -102,7 +102,7 @@ export class PortfolioGraphComponent implements OnInit {
 
   htmlChangeGraphDays(days) {
     this.selectedDays = days;
-    this.changeGraphDays(this.selectedDays).subscribe(
+    this.changeGraphDays().subscribe(
       res => {
         console.log(res);
       },
@@ -112,12 +112,12 @@ export class PortfolioGraphComponent implements OnInit {
     );
   }
 
-  changeGraphDays(days) {
+  changeGraphDays() {
     let ticker = this.selectedStock;
-    days = this.selectedDays;
+    let days = this.selectedDays;
     let observable = Observable.create((observer) => {
       observer.next(
-        this.service.getMovingDayAverageFromDb(ticker, days).subscribe(
+        this.service.getMovingDayAverageFromDb(ticker, days, this.fromDate, this.toDate).subscribe(
           res => {
             let historicalResultData: any = res;
             let historicalDataArray = historicalResultData.MovingDayAverage
