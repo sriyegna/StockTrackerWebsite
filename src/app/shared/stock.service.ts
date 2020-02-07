@@ -9,6 +9,7 @@ export class StockService {
   stocks = [];
   previousDayStocks = [];
   stocksObtained = false;
+  public sAndPValue = 0;
 
   constructor(private http:HttpClient) { }
 
@@ -68,6 +69,26 @@ export class StockService {
     return observable;
   }
 
+  getSAndP500() {
+    let observable = Observable.create((observer) => {
+      observer.next(
+        this.getSAndP500FromDb().subscribe(
+          res => {
+            let resultData: any = res;
+            let sAndPValue = resultData.SAndP500
+            this.sAndPValue = sAndPValue;
+            observer.complete();
+          },
+          err => {
+            console.log(err);
+            observer.complete();
+          }
+        )
+      );
+    })
+    return observable;
+  }
+
   getHistoricalData(ticker) {
     return this.http.get("http://127.0.0.1:5000/GetHistoricalData/" + ticker);
   }
@@ -88,13 +109,13 @@ export class StockService {
     return this.http.post("http://127.0.0.1:5000/UpdateDailyStockDb/", reqObj);
   }
 
-getMovingDayAverageFromDb(ticker, days) {
-  return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days);
-}
+  getMovingDayAverageFromDb(ticker, days) {
+    return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days);
+  }
 
-getSAndP500() {
-  return this.http.get("http://127.0.0.1:5000/GetSAndP500/");
-}
+  getSAndP500FromDb() {
+    return this.http.get("http://127.0.0.1:5000/GetSAndP500/");
+  }
 
 noOperation() {}
   

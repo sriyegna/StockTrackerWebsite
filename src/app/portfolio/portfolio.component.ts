@@ -9,15 +9,6 @@ import { StockService } from '../shared/stock.service';
 })
 export class PortfolioComponent implements OnInit {
 
-  
-
-  
-  public lineChart2Labels = []
-  public lineChart2Data = [];
-  selected2Stock = "";
-  selected2Days = 5;
-
-  sAndPValue = 0;
   portfolioValue = "0";
 
   constructor(private service:StockService) { }
@@ -31,8 +22,14 @@ export class PortfolioComponent implements OnInit {
           data => this.service.noOperation(),
           error => console.log(error),
           () => {
-            this.determinePortfolioValue();
-            this.service.stocksObtained = true;   
+            this.service.getSAndP500().subscribe(
+              data => this.service.noOperation(),
+              error => console.log(error),
+              () => {
+                this.determinePortfolioValue();
+                this.service.stocksObtained = true;
+              }
+            );
           }
         );
       }
@@ -58,19 +55,7 @@ export class PortfolioComponent implements OnInit {
     return (((cp/pp) * 100) - 100).toFixed(2);
   }
 
-  getSAndP500() {
-    this.service.getSAndP500().subscribe(
-      res => {
-        let resultData: any = res;
 
-        let sAndPValue = resultData.SAndP500
-        this.sAndPValue = sAndPValue;
-      },
-      err => {
-        console.log(err);
-      }
-    )
-  }
 
   determinePortfolioValue() {
     let portfolioSum = 0;

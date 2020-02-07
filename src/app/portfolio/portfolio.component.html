@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="card col-2 mx-auto mt-3 pt-3 pb-3 bg-dark text-white">
-        S&P 500: ${{sAndPValue}}
+        S&P 500: ${{service.sAndPValue}}
     </div>
     <div class="card col-4 mx-auto mt-3 pt-3 pb-3 bg-dark text-white">
         My Portfolio: ${{portfolioValue}}
@@ -51,11 +51,11 @@
     </div>
 
     <div class="col-4 mx-auto mt-3 pt-3 card bg-dark text-white" *ngIf="service.stocksObtained">
-        <app-portfolio-graph></app-portfolio-graph>
+        <app-portfolio-graph [graphIndex]=1></app-portfolio-graph>
     </div>
 
     <div class="col-4 mx-auto mt-3 pt-3 card bg-dark text-white" *ngIf="service.stocksObtained">
-        <app-portfolio-graph></app-portfolio-graph>
+        <app-portfolio-graph [graphIndex]=2></app-portfolio-graph>
     </div>
     
     

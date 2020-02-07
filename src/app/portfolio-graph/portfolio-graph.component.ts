@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { StockService } from '../shared/stock.service';
 import { Observable } from 'rxjs';
 import {NgbDate, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
@@ -9,9 +9,9 @@ import {NgbDate, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./portfolio-graph.component.css']
 })
 export class PortfolioGraphComponent implements OnInit {
+  @Input() graphIndex: number;
 
   hoveredDate: NgbDate;
-
   fromDate: NgbDate;
   toDate: NgbDate;
 
@@ -62,6 +62,11 @@ export class PortfolioGraphComponent implements OnInit {
    }
 
   ngOnInit() {
+  
+    //Problem if there is only one stock in the database. We will get an index of 2.
+    //this.selectedStock = this.service.stocks[this.graphIndex][1];
+    console.log(this.service.stocks[this.graphIndex][1]);
+  
     this.changeGraphDays(this.selectedDays).subscribe(
       data => this.service.noOperation(),
       error => console.log(error),
@@ -84,7 +89,7 @@ export class PortfolioGraphComponent implements OnInit {
     this.selectedStock = stk[1]
     this.changeGraphDays(this.selectedDays).subscribe(
       res => {
-        console.log(res);
+        this.service.noOperation();
       },
       err => {
         console.log(err);
