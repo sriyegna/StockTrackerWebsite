@@ -123,36 +123,43 @@ export class PortfolioGraphComponent implements OnInit {
             let m = historicalResultData.m
             let b = historicalResultData.b
 
-            let tickerData = {
-              data: [],
-              label: ticker
-            }
-
-            let linearData = {
+            let linearRegressionData = {
               data: [],
               label: days + " Linear Data"
+            }
+
+            let lineOfBestFitData = {
+              data: [],
+              label: days + " Best Fit"
+            }
+
+            let stockData = {
+              data: historicalResultData.histStockData,
+              label: ticker
             }
 
             this.lineChartLabels = [];
             for (let i = 0; i < historicalDataArray.length; i = i + 1) {
               this.lineChartLabels.push(historicalDataArray[i][2]);
-              tickerData.data.push(historicalDataArray[i][0])
+              linearRegressionData.data.push(historicalDataArray[i][0])
 
-              linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+              lineOfBestFitData.data.push(m*(i - (historicalDataArray.length - days)) + b);
               /*
               if (i >= historicalDataArray.length - days) {
-                linearData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+                lineOfBestFitData.data.push(m*(i - (historicalDataArray.length - days)) + b);
               }
               else {
-                linearData.data.push(null);
+                lineOfBestFitData.data.push(null);
               }
               */
               
             }
 
+
             this.lineChartData = [];
-            this.lineChartData.push(tickerData);
-            this.lineChartData.push(linearData);
+            this.lineChartData.push(linearRegressionData);
+            this.lineChartData.push(lineOfBestFitData);
+            this.lineChartData.push(stockData);
             observer.complete()
 
           },
