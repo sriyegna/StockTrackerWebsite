@@ -55,7 +55,7 @@
     </div>
 
     <div class="col-4 mx-auto mt-3 pt-3 card bg-dark text-white" *ngIf="service.stocksObtained">
-        <app-portfolio-graph [graphIndex]=2></app-portfolio-graph>
+        <app-portfolio-graph [graphIndex]=2 *ngIf="service.firstGraphLoaded"></app-portfolio-graph>
     </div>
     
     

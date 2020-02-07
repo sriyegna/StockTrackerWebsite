@@ -9,7 +9,8 @@ export class StockService {
   stocks = [];
   previousDayStocks = [];
   stocksObtained = false;
-  public sAndPValue = 0;
+  sAndPValue = 0;
+  firstGraphLoaded = false;
 
   constructor(private http:HttpClient) { }
 
