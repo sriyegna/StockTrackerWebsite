@@ -175,15 +175,7 @@ export class PortfolioGraphComponent implements OnInit {
     return observable;
   }
 
-  onDateSelection(date: NgbDate) {
-    if (!this.fromDate && !this.toDate) {
-      this.fromDate = date;
-    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
-      this.toDate = date;
-    } else {
-      this.toDate = null;
-      this.fromDate = date;
-    }
+  onDateSelection() {
     if ((this.fromDate != null) && (this.toDate != null)) {
       console.log("Changing graph days");
       this.changeGraphDays().subscribe(
