@@ -1,0 +1,37 @@
+<div>
+    <div class="row ml-2">
+        <div>
+            
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="stockddButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{selectedStock}}
+                </button>
+                <div id="stock-dd" class="dropdown-menu" aria-labelledby="stockddButton">
+                    <div class="dropdown-item" *ngFor="let stk of service.stocks" (click)="changeGraphTicker(stk)">{{stk[1]}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="ml-auto mr-2">
+            
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="graphddButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{selectedDays}}
+                </button>
+                <div id="graph-dd" class="dropdown-menu" aria-labelledby="graphddButton">
+                    <div class="dropdown-item" (click)="htmlChangeGraphDays(5)">5 Days</div>
+                    <div class="dropdown-item" (click)="htmlChangeGraphDays(10)">10 Days</div>
+                    <div class="dropdown-item" (click)="htmlChangeGraphDays(20)">20 Days</div>
+                    <div class="dropdown-item" (click)="htmlChangeGraphDays(50)">50 Days</div>
+                    <div class="dropdown-item" (click)="htmlChangeGraphDays(100)">100 Days</div>
+                    <div class="dropdown-item" (click)="htmlChangeGraphDays(200)">200 Days</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        
+    </div>
+
+    
+    <canvas class="pt-3" *ngIf="lineChartDataPopulated()" baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>

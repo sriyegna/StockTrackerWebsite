@@ -13,6 +13,7 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { StockTableComponent } from './stock-table/stock-table.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { PortfolioGraphComponent } from './portfolio-graph/portfolio-graph.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
     BarChartComponent,
     LineChartComponent,
     StockTableComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    PortfolioGraphComponent
   ],
   imports: [
     BrowserModule,

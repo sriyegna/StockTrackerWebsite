@@ -7,7 +7,8 @@ import { Observable } from 'rxjs'
 })
 export class StockService {
   stocks = [];
-  previousDayStocks = []
+  previousDayStocks = [];
+  stocksObtained = false;
 
   constructor(private http:HttpClient) { }
 
@@ -18,7 +19,6 @@ export class StockService {
       observer.next(
         this.getLatestStocksFromDb().subscribe(
           res => {
-            console.log(res);
             let stockResultData: any = res;
             let stockData = stockResultData.LatestStocks
     
@@ -48,7 +48,6 @@ export class StockService {
       observer.next(
         this.getPreviousDayStockFromDb().subscribe(
           res => {
-            console.log(res);
             let stockResultData: any = res;
             let stockData = stockResultData.PreviousStocks
 
@@ -89,18 +88,15 @@ export class StockService {
     return this.http.post("http://127.0.0.1:5000/UpdateDailyStockDb/", reqObj);
   }
 
-getMovingDayAverageFromDb(ticker, days, fromDate, toDate) {
-  return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days + "&" + this.ngbDateToString(fromDate) + "&" + this.ngbDateToString(toDate));
+getMovingDayAverageFromDb(ticker, days) {
+  return this.http.get("http://127.0.0.1:5000/MovingDayAverage/" + ticker + "&" + days);
 }
 
 getSAndP500() {
   return this.http.get("http://127.0.0.1:5000/GetSAndP500/");
 }
 
-ngbDateToString(date) {
-  return date.year + "-" + date.month + "-" + date.day;
-}
-
+noOperation() {}
   
 
 
