@@ -6,10 +6,10 @@
 
 <div class="row">
     <div class="card col-2 mx-auto mt-3 pt-3 pb-3 bg-dark text-white">
-        S&P 500: ${{service.sAndPValue}}
+        <span>S&P 500: <span [ngClass]="determineColour(service.sAndPValue) ? 'green-text':'red-text'">${{service.sAndPValue}}</span></span>
     </div>
     <div class="card col-4 mx-auto mt-3 pt-3 pb-3 bg-dark text-white">
-        My Portfolio: ${{portfolioValue}}
+        <span>My Portfolio: <span [ngClass]="determineColour(portfolioValue) ? 'green-text':'red-text'">${{portfolioValue}}</span></span>
     </div>
     <div class="card col-4 mx-auto mt-3 pt-3 pb-3 bg-dark text-white">
         Blank
@@ -81,7 +81,7 @@
             <tbody>
                 <tr *ngFor="let stk of service.stocks; let i = index" [attr.data-index]="i">
                     <th scope="row">
-                        {{i}}
+                        {{i+1}}
                     </th>
                     <td>
                         {{stk[1]}}
@@ -95,7 +95,7 @@
                     <td>
                         IP
                     </td>
-                    <td>
+                    <td [ngClass]="determineGainLossColour(service.previousDayStocks[i][6], stk[6]) ? 'green-text':'red-text'">
                         {{determineGainLoss(service.previousDayStocks[i][6], stk[6])}}%
                     </td>
                 </tr>

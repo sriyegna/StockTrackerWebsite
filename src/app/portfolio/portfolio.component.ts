@@ -72,4 +72,19 @@ export class PortfolioComponent implements OnInit {
     return false;
   }
 
+  determineGainLossColour(previousValue, currentValue) {
+    let result = Number(this.determineGainLoss(previousValue, currentValue));
+    if (result < 0) {
+      return false;
+    }
+    return true;
+  }
+
+  determineColour(value) {
+    if (value < 0) {
+      return false;
+    }
+    return true;
+  }
+
 }

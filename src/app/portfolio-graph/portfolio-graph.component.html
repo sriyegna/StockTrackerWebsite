@@ -33,7 +33,7 @@
         <div class="form-group">
           <div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd"
-                   name="dp" [(ngModel)]="fromDate" ngbDatepicker #dFrom="ngbDatepicker" (ngModelChange)="onDateSelection()" [maxDate]="toDate">
+                   name="dp" [(ngModel)]="fromDate" ngbDatepicker #dFrom="ngbDatepicker" (ngModelChange)="onDateSelection()" [maxDate]="toDate" [minDate]="{year: 2000, month: 1, day: 1}">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar" (click)="dFrom.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
             </div>
@@ -44,7 +44,7 @@
         <div class="form-group">
           <div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd"
-                   name="dp" [(ngModel)]="toDate" ngbDatepicker #dTo="ngbDatepicker" (ngModelChange)="onDateSelection()" [maxDate]="maxDate">
+                   name="dp" [(ngModel)]="toDate" ngbDatepicker #dTo="ngbDatepicker" (ngModelChange)="onDateSelection()" [maxDate]="maxDate" [minDate]="{year: 2000, month: 1, day: 1}">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar" (click)="dTo.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
             </div>
