@@ -46,8 +46,8 @@ export class PortfolioGraphComponent implements OnInit {
         zoom: {
           enabled: true,
           mode: 'x',
-          speed: 0.5,
-          drag: true
+          sensitivity: 0.001,
+          speed: 10
 
         }
       }
