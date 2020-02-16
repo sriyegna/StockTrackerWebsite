@@ -23,7 +23,8 @@
         <table class="table table-dark">
             <tbody>
                 <div *ngFor="let stk of service.stocks; let i = index" [attr.data-index]="i" class="divTableRow">
-                    <tr *ngIf="i<5">
+                    <!-- <tr *ngIf="i<5"> -->
+                    <tr>
                         <td>
                             {{stk[1]}}
                         </td>
@@ -34,7 +35,8 @@
                             <button type="button" class="btn btn-primary" (click)="UpdateStock(stk)">Sell</button>
                         </td>
                     </tr>
-                    <tr class="tableSecondTr" *ngIf="i<5">
+                    <!-- <tr class="tableSecondTr" *ngIf="i<5"> -->
+                    <tr class="tableSecondTr">
                         <td *ngIf="previousStockAvailable()">
                             PP: ${{service.previousDayStocks[i][6]}}
                         </td>
@@ -74,8 +76,8 @@
                     <th scope="col">Ticker</th>
                     <th scope="col">Purchase Price</th>
                     <th scope="col">Current Price</th>
-                    <th scope="col">Implied Volatility</th>
                     <th scope="col">% Gain/Loss</th>
+                    <th scope="col">Implied Volatility</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,11 +94,11 @@
                     <td>
                         ${{stk[6]}}
                     </td>
-                    <td>
-                        IP
-                    </td>
                     <td [ngClass]="determineGainLossColour(service.previousDayStocks[i][6], stk[6]) ? 'green-text':'red-text'">
                         {{determineGainLoss(service.previousDayStocks[i][6], stk[6])}}%
+                    </td>
+                    <td>
+                        IP
                     </td>
                 </tr>
             </tbody>
