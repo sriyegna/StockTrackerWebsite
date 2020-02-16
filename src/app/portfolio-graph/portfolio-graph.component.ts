@@ -122,8 +122,8 @@ export class PortfolioGraphComponent implements OnInit {
           res => {
             let historicalResultData: any = res;
             let historicalDataArray = historicalResultData.MovingDayAverage
-            let m = historicalResultData.m
-            let b = historicalResultData.b
+            // let m = historicalResultData.m
+            // let b = historicalResultData.b
 
             let linearRegressionData = {
               data: [],
@@ -131,7 +131,7 @@ export class PortfolioGraphComponent implements OnInit {
             }
 
             let lineOfBestFitData = {
-              data: [],
+              data: historicalResultData.bestFitData,
               label: days + " Best Fit"
             }
 
@@ -145,7 +145,7 @@ export class PortfolioGraphComponent implements OnInit {
               this.lineChartLabels.push(historicalDataArray[i][2]);
               linearRegressionData.data.push(historicalDataArray[i][0])
 
-              lineOfBestFitData.data.push(m*(i - (historicalDataArray.length - days)) + b);
+              // lineOfBestFitData.data.push(m*(i - (historicalDataArray.length - days)) + b);
               /*
               if (i >= historicalDataArray.length - days) {
                 lineOfBestFitData.data.push(m*(i - (historicalDataArray.length - days)) + b);
